@@ -1,0 +1,20 @@
+<network{% if item.dnsmasq_options is defined %} xmlns:dnsmasq='http://libvirt.org/schemas/network/dnsmasq/1.0' {% endif %}>
+  <name>{{ item.name }}</name>
+  <bridge name="virbr{{ item.id }}"/>
+  <forward mode="nat"/>
+  {% if item.dnsname is defined %}
+  <domain name="{{ item.dnsname }}"/>
+  {% endif %}
+  <ip address="{{ item.subnet | ipaddr('first_usable') }}" netmask="{{ item.subnet | ipaddr('netmask') }}">
+    <dhcp>
+      <range start="{{ item.subnet | nthhost(150) }}" end="{{ item.subnet | nthhost(200) }}"/>
+    </dhcp>
+  </ip>
+  {% if item.dnsmasq_options is defined %}
+  <dnsmasq:options>
+  {% for option in item.dnsmasq_options %}
+    <dnsmasq:option value="{{ option }}" />
+  {% endfor %}
+  </dnsmasq:options>
+  {% endif %}
+</network>
