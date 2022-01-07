@@ -5,7 +5,7 @@
     command: define
     name: "{{ item.name }}"
     xml: '{{ lookup("template", "net.xml.j2") }}'
-    uri: "{{ kvm_addr | default('127.0.0.1') }}"
+    uri: "{{ kvm_addr | default('qemu:///system') }}"
   loop: "{{ networks }}"
   delegate_to: "{{ kvm_host }}"
 
@@ -13,6 +13,6 @@
   virt_net:
     command: create
     name: "{{ item.name }}"
-    uri: "{{ kvm_addr | default('127.0.0.1') }}"
+    uri: "{{ kvm_addr | default('qemu:///system') }}"
   loop: "{{ networks }}"
   delegate_to: "{{ kvm_host }}"
